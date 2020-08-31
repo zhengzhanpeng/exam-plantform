@@ -3,10 +3,8 @@ package exam.answerSheetContext.domain.model.answerSheet;
 import exam.answerSheetContext.shared.ValueObject;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode
-@NoArgsConstructor
 public class Answer implements ValueObject {
 
     @Getter
@@ -18,9 +16,18 @@ public class Answer implements ValueObject {
     @Getter
     private Integer score;
 
-    public Answer(String blankQuizId, Integer score) {
+    Answer(String blankQuizId, Integer score) {
         this.blankQuizId = blankQuizId;
         this.score = score;
+    }
+
+    public Answer(String blankQuizId, String answer) {
+        this.blankQuizId = blankQuizId;
+        this.answer = answer;
+    }
+
+    void setAnswer(String answer) {
+        this.answer = answer;
     }
 
     @Override

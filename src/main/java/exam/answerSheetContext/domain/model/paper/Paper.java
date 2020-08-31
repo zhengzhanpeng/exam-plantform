@@ -1,6 +1,6 @@
 package exam.answerSheetContext.domain.model.paper;
 
-import exam.answerSheetContext.ValueObject;
+import exam.answerSheetContext.shared.ValueObject;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,6 +10,8 @@ import java.util.List;
 
 @EqualsAndHashCode
 public class Paper implements ValueObject<Paper> {
+
+    @Getter
     private String paperId;
 
     private List<BlankQuiz> blankQuizzes;

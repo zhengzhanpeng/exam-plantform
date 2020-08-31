@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toMap;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "answerSheetId")
@@ -41,6 +44,12 @@ public class AnswerSheet implements Entity {
                                    .collect(Collectors.toList());
         answerSheet.answerSheetId = AnswerSheetId.nextId();
         return answerSheet;
+    }
+
+    public void submitAnswerSheet(String studentId, String paperId, List<Answer> answers) {
+        Map<String, String> answerMap = answers.stream()
+                                               .collect(toMap(Answer::getBlankQuizId, Answer::getAnswer));
+        this.answers.forEach(answer -> answer.setAnswer(answerMap.get(answer.getBlankQuizId())));
     }
 
     public List<Answer> getAnswers() {

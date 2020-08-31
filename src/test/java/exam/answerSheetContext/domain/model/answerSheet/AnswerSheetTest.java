@@ -34,4 +34,21 @@ class AnswerSheetTest {
         assertEquals(answer.getBlankQuizId(), blankQuiz.getQuizId());
         assertSame(0, answer.getScore());
     }
+
+    @Test
+    void should_submit_answer_sheet_successful() {
+        String studentId = "studentId";
+        String quizId = "quizId";
+        Paper.BlankQuiz blankQuiz = new Paper.BlankQuiz(quizId, "answer", 10);
+        Paper paper = new Paper("paperId", Collections.singletonList(blankQuiz));
+
+        AnswerSheet answerSheet = AnswerSheet.assignAnswerSheet(paper, studentId);
+
+        Answer answer = new Answer(quizId, "answer");
+
+        answerSheet.submitAnswerSheet(studentId, paper.getPaperId(), Collections.singletonList(answer));
+
+        Answer answerAtAnswerSheet = answerSheet.getAnswers().get(0);
+        assertEquals("answer", answerAtAnswerSheet.getAnswer());
+    }
 }
