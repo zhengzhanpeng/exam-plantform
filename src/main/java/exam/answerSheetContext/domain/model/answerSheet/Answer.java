@@ -30,6 +30,10 @@ public class Answer implements ValueObject {
         this.answer = answer;
     }
 
+    void setScore(Integer score) {
+        this.score = score;
+    }
+
     @Override
     public boolean sameValueAs(Object other) {
         return this.equals(other);

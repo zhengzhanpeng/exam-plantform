@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toMap;
@@ -60,6 +61,18 @@ public class AnswerSheet implements Entity {
         Map<String, String> answerMap = answers.stream()
                                                .collect(toMap(Answer::getBlankQuizId, Answer::getAnswer));
         this.answers.forEach(answer -> answer.setAnswer(answerMap.get(answer.getBlankQuizId())));
+    }
+
+    public void reviewAnswerSheet() {
+        Map<String, Paper.BlankQuiz> blankQuizMap = paper.getBlankQuizzes()
+                                                         .stream()
+                                                         .collect(toMap(Paper.BlankQuiz::getQuizId, Function.identity()));
+        this.answers.forEach(answer -> {
+            Paper.BlankQuiz blankQuiz = blankQuizMap.get(answer.getBlankQuizId());
+            if (blankQuiz.getAnswer().equals(answer.getAnswer())) {
+                answer.setScore(blankQuiz.getScore());
+            }
+        });
     }
 
     public List<Answer> getAnswers() {
