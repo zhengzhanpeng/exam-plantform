@@ -1,0 +1,15 @@
+@startuml
+actor Teacher
+Teacher -> PaperController : PUT /paper/:paper_id
+PaperController -> PaperController: transform()
+PaperController -> PaperApplicationService : reassemblePaper()
+entity Paper
+PaperApplicationService -> PaperRepository: find()
+database paperDB
+PaperRepository -> paperDB: SELECT ***
+PaperApplicationService -> Paper : reassemble()
+PaperApplicationService -> PaperRepository: save()
+
+PaperRepository -> paperDB: UPDATE ***
+
+@enduml
