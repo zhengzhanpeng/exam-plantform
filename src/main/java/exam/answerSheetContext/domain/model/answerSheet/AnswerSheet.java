@@ -47,6 +47,16 @@ public class AnswerSheet implements Entity {
     }
 
     public void submitAnswerSheet(String studentId, String paperId, List<Answer> answers) {
+        String currentPaperId = this.paper.getPaperId();
+        if (!currentPaperId.equals(paperId)) {
+            throw new IllegalPaperException(currentPaperId, paperId);
+        }
+
+        if (!this.studentId.equals(studentId)) {
+            throw new IllegalStudentException(this.studentId, studentId);
+        }
+
+
         Map<String, String> answerMap = answers.stream()
                                                .collect(toMap(Answer::getBlankQuizId, Answer::getAnswer));
         this.answers.forEach(answer -> answer.setAnswer(answerMap.get(answer.getBlankQuizId())));
