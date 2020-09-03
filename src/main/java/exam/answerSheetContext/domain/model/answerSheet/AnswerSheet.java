@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toMap;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "answerSheetId")
-public class AnswerSheet implements Entity {
+public class AnswerSheet implements Entity<AnswerSheet> {
 
     @Getter
     private AnswerSheetId answerSheetId;
@@ -31,7 +31,7 @@ public class AnswerSheet implements Entity {
     private List<Answer> answers;
 
     @Override
-    public boolean sameIdentityAs(Object other) {
+    public boolean sameIdentityAs(AnswerSheet other) {
         return this.equals(other);
     }
 

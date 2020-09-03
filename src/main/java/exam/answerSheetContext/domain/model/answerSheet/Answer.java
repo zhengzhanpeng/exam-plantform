@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.util.Map;
 
 @EqualsAndHashCode
-public class Answer implements ValueObject {
+public class Answer implements ValueObject<Answer> {
 
     @Getter
     private String blankQuizId;
@@ -49,7 +49,7 @@ public class Answer implements ValueObject {
     }
 
     @Override
-    public boolean sameValueAs(Object other) {
+    public boolean sameValueAs(Answer other) {
         return this.equals(other);
     }
 }
