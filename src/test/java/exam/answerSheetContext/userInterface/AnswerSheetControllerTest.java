@@ -1,6 +1,8 @@
 package exam.answerSheetContext.userInterface;
 
 import exam.answerSheetContext.application.AssignAnswerSheetCommand;
+import exam.answerSheetContext.application.SubmitAnswerSheetCommand;
+import exam.answerSheetContext.domain.model.answerSheet.Answer;
 import exam.answerSheetContext.domain.model.answerSheet.AnswerSheet;
 import exam.answerSheetContext.domain.model.answerSheet.AnswerSheetRepository;
 import exam.answerSheetContext.domain.model.paper.Paper;
@@ -34,6 +36,7 @@ class AnswerSheetControllerTest extends IntegrationTestBase {
         given().body(assignAnswerSheetCommand)
                .post("/api/answer-sheet")
                .then()
+               .statusCode(200)
                .body("answerSheetId", is(not(nullValue())))
                .body("answers[0].blankQuizId", is(not(nullValue())))
                .body("answers[0].answer", is(nullValue()))
@@ -50,5 +53,29 @@ class AnswerSheetControllerTest extends IntegrationTestBase {
         assertEquals("answer", blankQuizAtDatabase.getAnswer());
         assertEquals(10, blankQuizAtDatabase.getScore());
         assertNotNull(blankQuizAtDatabase.getQuizId());
+    }
+
+    @Test
+    void should_submit_answer_sheet_successful() {
+        Paper.BlankQuiz blankQuiz = new Paper.BlankQuiz("blankQuizId", "answer", 10);
+        Paper paper = new Paper("paperId", Collections.singletonList(blankQuiz));
+        AnswerSheet answerSheet = AnswerSheet.assignAnswerSheet(paper, "studentId");
+        memoryAnswerSheetRepository.save(answerSheet);
+
+        SubmitAnswerSheetCommand command = new SubmitAnswerSheetCommand();
+        AnswerDTO answerDTO = new AnswerDTO("blankQuizId", "answer", 10);
+        command.setAnswers(Collections.singletonList(answerDTO));
+        command.setAnswerSheetId(answerSheet.getAnswerSheetId().getId());
+        command.setPaperId("paperId");
+
+        given().body(command)
+               .patch("/api/answer-sheet")
+               .then()
+               .statusCode(200);
+
+        AnswerSheet answerSheetAtDatabase = memoryAnswerSheetRepository.findAll().iterator().next();
+        Answer answer = answerSheetAtDatabase.getAnswers().get(0);
+        assertEquals("answer", answer.getAnswer());
+        assertEquals(10, answer.getScore());
     }
 }

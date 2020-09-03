@@ -1,5 +1,6 @@
 package exam.answerSheetContext.userInterface;
 
+import exam.answerSheetContext.infrastructure.Repository;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.specification.MockMvcRequestSpecification;
@@ -11,6 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
@@ -21,8 +24,14 @@ public abstract class IntegrationTestBase {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    @Autowired
+    private List<Repository> repositories;
+
     @BeforeEach
     public void initApplication() {
+        repositories.forEach(repository -> {
+            repository.findAll().clear();
+        });
         RestAssuredMockMvc.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
     }
