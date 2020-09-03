@@ -1,6 +1,5 @@
 package exam.answerSheetContext.userInterface;
 
-import exam.answerSheetContext.domain.model.answerSheet.Answer;
 import exam.answerSheetContext.domain.model.answerSheet.AnswerSheet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,5 +31,6 @@ public class AnswerSheetDTO {
                                                                      .build())
                                              .collect(toList());
         answerSheetDTO.setAnswers(answers);
+        return answerSheetDTO;
     }
 }

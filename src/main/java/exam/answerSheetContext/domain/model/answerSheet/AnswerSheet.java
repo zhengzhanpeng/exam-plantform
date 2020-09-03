@@ -60,19 +60,14 @@ public class AnswerSheet implements Entity {
 
         Map<String, String> answerMap = answers.stream()
                                                .collect(toMap(Answer::getBlankQuizId, Answer::getAnswer));
-        this.answers.forEach(answer -> answer.setAnswer(answerMap.get(answer.getBlankQuizId())));
+        this.answers.forEach(answer -> answer.updateAnswer(answerMap));
     }
 
     public void reviewAnswerSheet() {
         Map<String, Paper.BlankQuiz> blankQuizMap = paper.getBlankQuizzes()
                                                          .stream()
                                                          .collect(toMap(Paper.BlankQuiz::getQuizId, Function.identity()));
-        this.answers.forEach(answer -> {
-            Paper.BlankQuiz blankQuiz = blankQuizMap.get(answer.getBlankQuizId());
-            if (blankQuiz.getAnswer().equals(answer.getAnswer())) {
-                answer.setScore(blankQuiz.getScore());
-            }
-        });
+        this.answers.forEach(answer -> answer.calculateScore(blankQuizMap));
     }
 
     public List<Answer> getAnswers() {

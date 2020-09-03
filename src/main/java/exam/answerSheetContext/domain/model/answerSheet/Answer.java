@@ -1,8 +1,11 @@
 package exam.answerSheetContext.domain.model.answerSheet;
 
+import exam.answerSheetContext.domain.model.paper.Paper;
 import exam.answerSheetContext.shared.ValueObject;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+
+import java.util.Map;
 
 @EqualsAndHashCode
 public class Answer implements ValueObject {
@@ -24,6 +27,17 @@ public class Answer implements ValueObject {
     public Answer(String blankQuizId, String answer) {
         this.blankQuizId = blankQuizId;
         this.answer = answer;
+    }
+
+    void updateAnswer(Map<String, String> answerMap) {
+        this.answer = answerMap.get(this.blankQuizId);
+    }
+
+    void calculateScore(Map<String, Paper.BlankQuiz> blankQuizMap) {
+        Paper.BlankQuiz blankQuiz = blankQuizMap.get(this.blankQuizId);
+        if (blankQuiz.getAnswer().equals(this.answer)) {
+            this.score = blankQuiz.getScore();
+        }
     }
 
     void setAnswer(String answer) {
