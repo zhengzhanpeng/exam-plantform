@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AnswerSheetTest {
 
@@ -50,6 +51,38 @@ class AnswerSheetTest {
 
         Answer answerAtAnswerSheet = answerSheet.getAnswers().get(0);
         assertEquals("answer", answerAtAnswerSheet.getAnswer());
+    }
+
+    @Test
+    void should_throw_IllegalPaperException_when_submit_paper_is_not_match_current_paper() {
+        String studentId = "studentId";
+        String quizId = "quizId";
+        Paper.BlankQuiz blankQuiz = new Paper.BlankQuiz(quizId, "answer", 10);
+        Paper paper = new Paper("paperId", Collections.singletonList(blankQuiz));
+
+        AnswerSheet answerSheet = AnswerSheet.assignAnswerSheet(paper, studentId);
+
+        Answer answer = new Answer(quizId, "answer");
+
+        assertThrows(IllegalPaperException.class,
+                () -> answerSheet.submitAnswerSheet(studentId, "errorPaperId", Collections.singletonList(answer))
+        );
+    }
+
+    @Test
+    void should_throw_IllegalStudentException_when_submit_paper_is_owner_student() {
+        String studentId = "studentId";
+        String quizId = "quizId";
+        Paper.BlankQuiz blankQuiz = new Paper.BlankQuiz(quizId, "answer", 10);
+        Paper paper = new Paper("paperId", Collections.singletonList(blankQuiz));
+
+        AnswerSheet answerSheet = AnswerSheet.assignAnswerSheet(paper, studentId);
+
+        Answer answer = new Answer(quizId, "answer");
+
+        assertThrows(IllegalStudentException.class,
+                () -> answerSheet.submitAnswerSheet("errorStudentId", paper.getPaperId(), Collections.singletonList(answer))
+        );
     }
 
     @Test
