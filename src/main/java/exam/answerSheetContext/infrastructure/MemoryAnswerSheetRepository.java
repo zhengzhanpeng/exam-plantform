@@ -18,6 +18,11 @@ public class MemoryAnswerSheetRepository implements AnswerSheetRepository {
     }
 
     @Override
+    public Set<AnswerSheet> findAll() {
+        return answerSheets;
+    }
+
+    @Override
     public Optional<AnswerSheet> findById(String answerSheetId) {
         return answerSheets.stream()
                            .filter(answerSheet -> answerSheet.getAnswerSheetId().equals(answerSheetId))
